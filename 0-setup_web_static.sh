@@ -9,4 +9,5 @@ echo -e "<html>\n\t<head>\n\t\t<title>Best School</title>\n\t</head>\n\t<body>\n
 rm -f /data/web_static/current > /dev/null
 ln -s /data/web_static/releases/test /data/web_static/current
 chown -R ubuntu:ubuntu /data/
-sed -i "s/server_name _;/\tserver_name _;\n\tlocation /hbnb_static/ {\n\t\talias /data/webstatic/current;\n\t\ttry_files \$uri \$uri/ =404;\n\t}"
+sed -i "s/server_name _;/server_name _;\n\tlocation \/hbnb_static {\n\t\talias \/data\/web_static\/current;\n\t\ttry_files \$uri \$uri\/ =404;\n\t}/" /etc/nginx/sites-available/default
+service nginx restart
