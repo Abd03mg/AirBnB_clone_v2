@@ -31,21 +31,19 @@ def do_pack():
 def do_deploy(arch):
     """function that distributes
     an archive to your web servers"""
-    try:
-        ArName = arch.split("/")[-1][0:-4]
-        dest = "/data/web_static/releases/"
-        if (not ex(arch)):
-            return False
-        put(arch, "/tmp/")
-        res = run("mkdir -p {}{}/ ;"
-                  "tar -xzf /tmp/{} -C {}{}/ ;"
-                  "mv {}{}/web_static/* {}{}/ ;"
-                  "rm -rf {}{}/web_static;"
-                  "rm -rf /data/web_static/current;"
-                  "ln -s {}{}/ /data/web_static/current".format(
-                    dest, ArName, arch, dest, ArName, dest, ArName,
-                    dest, ArName, dest, ArName, dest, ArName))
 
-        return False if res.failed else True
-    except Exception:
+    ArName = arch.split("/")[-1][0:-4]
+    dest = "/data/web_static/releases/"
+    if (not ex(arch)):
         return False
+    put(arch, "/tmp/")
+    res = local("mkdir -p {}{}/ ;"
+              "tar -xzf /tmp/{} -C {}{}/ ;"
+              "mv {}{}/web_static/* {}{}/ ;"
+              "rm -rf {}{}/web_static;"
+              "rm -rf /data/web_static/current;"
+              "ln -s {}{}/ /data/web_static/current".format(
+                  dest, ArName, arch, dest, ArName, dest, ArName,
+                  dest, ArName, dest, ArName, dest, ArName))
+
+    return False if res.failed else True
