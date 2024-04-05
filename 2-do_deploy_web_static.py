@@ -37,13 +37,13 @@ def do_deploy(arch):
     if (not ex(arch)):
         return False
     put(arch, "/tmp/")
-    res = run("mkdir -p {dest}{ArName}/ ;"
-              "tar -xzf /tmp/{arch} -C {dest}{ArName}/ ;"
-              "mv {dest}{ArName}/web_static/* {dest}{ArName}/ ;"
-              "rm -rf {dest}{ArName}/web_static;"
+    res = run("mkdir -p {}{}/ ;"
+              "tar -xzf /tmp/{} -C {}{}/ ;"
+              "mv {}{}/web_static/* {}{}/ ;"
+              "rm -rf {}{}/web_static;"
               "rm -rf /data/web_static/current;"
-              "ln -s {dest}{ArName}/ /data/web_static/current".format(
-                  dest, ArNaem, arch, dest, ArName, dest, ArName,
+              "ln -s {}{}/ /data/web_static/current".format(
+                  dest, ArName, arch, dest, ArName, dest, ArName,
                   dest, ArName, dest, ArName, dest, ArName))
 
     return False if res.failed else True
