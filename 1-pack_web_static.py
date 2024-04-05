@@ -18,6 +18,6 @@ def do_pack():
         if ret.succeeded:
             return ret.command.split(" ")[2]
         else:
-            return None;
+            return None
     except Exception:
-        return None;
+        return None
