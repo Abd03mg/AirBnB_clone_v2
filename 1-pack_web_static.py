@@ -10,7 +10,7 @@ def do_pack():
     """ Function that archive """
 
     try:
-        ArchName = "versions/web_static_{}".format(
+        ArchName = "versions/web_static_{}.tgz".format(
                 dt.now().strftime("%Y%m%d%H%M%S"))
         makedirs('versions', exist_ok=True)
 
