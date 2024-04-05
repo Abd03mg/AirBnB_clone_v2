@@ -4,7 +4,7 @@
 from fabric.api import *
 from datetime import datetime as dt
 from os import makedirs
-from os.path import exists as ex
+from os.path import exists
 
 
 env.user = "ubuntu"
@@ -34,18 +34,14 @@ def do_deploy(arch):
     try:
         ArName = arch.split("/")[-1][0:-4]
         dest = "/data/web_static/releases/"
-        if (not ex(arch)):
+        if not (exists(arch)):
             return False
         put(arch, "/tmp/")
-        res = run("mkdir -p {}{}/ ;"
-                  "tar -xzf /tmp/{} -C {}{}/ ;"
-                  "mv {}{}/web_static/* {}{}/ ;"
-                  "rm -rf {}{}/web_static;"
-                  "rm -rf /data/web_static/current;"
-                  "ln -s {}{}/ /data/web_static/current".format(
-                    dest, ArName, arch, dest, ArName, dest, ArName,
-                    dest, ArName, dest, ArName, dest, ArName))
-
-        return False if res.failed else True
+        run("mkdir -p {}{}/ ;".format(dest, ArName))
+        run("tar -xzf /tmp/{}.tgz -C {}{}/".format(ArName, dest, ArName))
+        run("mv {}{}/web_static/* {}{}/".format(dest, ArName, dest, ArName))
+        run("rm -rf {}{}/web_static;".format(dest, ArName))
+        run("rm -rf /data/web_static/current;")
+        run("ln -s {}{}/ /data/web_static/current".format(dest, Arname))
     except Exception:
         return False
