@@ -25,6 +25,6 @@ def do_deploy(arch):
             dest, ArName))
         run("rm -rf {}{}/web_static;".format(dest, ArName))
         run("rm -rf /data/web_static/current;")
-        run("ln -s {}{}/ /data/web_static/current".format(dest, ArName))
+        run("ln -sf {}{}/ /data/web_static/current".format(dest, ArName))
     except Exception:
         return False
