@@ -9,15 +9,15 @@ env.user = "ubuntu"
 env.hosts = ['18.209.179.152', '3.86.13.133']
 
 
-def do_deploy(arch):
+def do_deploy(archive_path):
     """function that distributes
     an archive to your web servers"""
     try:
-        ArName = arch.split("/")[-1][0:-4]
+        ArName = archive_path.split("/")[-1][0:-4]
         dest = "/data/web_static/releases/"
-        if not (exists(arch)):
+        if not (exists(archive_path)):
             return False
-        put(arch, "/tmp/")
+        put(archive_path, "/tmp/")
         run("mkdir -p {}{}/ ;".format(dest, ArName))
         sudo("chown -R $(id -un):$(id -gn) /data/")
         run("tar -xzf /tmp/{}.tgz -C {}{}/".format(ArName, dest, ArName))
