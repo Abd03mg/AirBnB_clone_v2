@@ -1,31 +1,38 @@
 #!/usr/bin/python3
-""" Fabric script that generates archive."""
+"""Defines a fabric function `do_deploy` that distributes
+an archive to web servers"""
 
 from fabric.api import *
-from os.path import exists
+import os
 
-
-env.hosts = ['18.209.179.152', '3.86.13.133']
+env.hosts = [
+    "54.157.187.24",
+    "54.158.255.184"
+]
 
 
 def do_deploy(archive_path):
-    """function that distributes
-    an archive to your web servers"""
+    """distributes an archive to web servers
+    """
+    archive_exists = os.path.exists(archive_path)
+    if not archive_exists:
+        return False
+
     try:
-        ArName = archive_path.split("/")[-1][0:-4]
-        dest = "/data/web_static/releases/"
-        if not (exists(archive_path)):
-            return False
+        archive_fn = archive_path.split("/")[-1]
+        archive_dir = "/data/web_static/releases/{}".format(
+            archive_fn.split(".")[0])
+
         put(archive_path, "/tmp/")
-        sudo("mkdir -p {}{}/".format(dest, ArName))
+        run("mkdir -p {}".format(archive_dir))
+        run("tar -xzf /tmp/{fn} --directory {dir}".format(
+            fn=archive_fn, dir=archive_dir))
+        run("rsync -a {dir}/web_static/* {dir}".format(dir=archive_dir))
         sudo("chown -R ubuntu:ubuntu /data/")
-        run("tar -xzf /tmp/{}.tgz -C {}{}/".format(ArName, dest, ArName))
-        run("rsync -a {}{}/web_static/* {}{}".format(dest, ArName,
-            dest, ArName))
-        run("rm -rf /tmp/{}.tgz".format(ArName))
-        run("rm -rf {}{}/web_static".format(dest, ArName))
+        run("rm -rf {dir}/web_static".format(dir=archive_dir))
+        run("rm /tmp/{}".format(archive_fn))
         run("rm -rf /data/web_static/current")
-        run("ln -sf {}{}/ /data/web_static/current".format(dest, ArName))
+        run("ln -sf {} /data/web_static/current".format(archive_dir))
+        return True
     except Exception:
         return False
-    return True
