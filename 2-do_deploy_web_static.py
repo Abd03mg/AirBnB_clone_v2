@@ -18,9 +18,9 @@ def do_deploy(arch):
         if not (exists(arch)):
             return False
         put(arch, "/tmp/")
-        sudo("mkdir -p {}{}/ ;".format(dest, ArName))
-        sudo("chown -R $(id -un):$(id -gn) /data/web_static")
-        run("tar -xzf /tmp/{}.tgz -C {}{}/".format(ArName, dest, ArName))
+        run("mkdir -p {}{}/ ;".format(dest, ArName))
+        sudo("chown -R $(id -un):$(id -gn) /data/")
+        run("tar -xzf /tmp/{}.tgz -C {}{}".format(ArName, dest, ArName))
         run("rsync -a {}{}/web_static/* {}{}/".format(dest, ArName,
             dest, ArName))
         run("rm -rf {}{}/web_static;".format(dest, ArName))
