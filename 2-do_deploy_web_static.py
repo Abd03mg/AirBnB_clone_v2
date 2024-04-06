@@ -21,7 +21,7 @@ def do_deploy(archive_path):
         run("mkdir -p {}{}/ ;".format(dest, ArName))
         sudo("chown -R $(id -un):$(id -gn) /data/")
         run("tar -xzf /tmp/{}.tgz -C {}{}/".format(ArName, dest, ArName))
-        run("rsync -a {}{}/web_static/* {}{}/".format(dest, ArName,
+        run("rsync -a {}{}/web_static/* {}{}".format(dest, ArName,
             dest, ArName))
         run("rm -rf {}{}/web_static;".format(dest, ArName))
         run("rm -rf /data/web_static/current;")
