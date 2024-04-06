@@ -19,9 +19,10 @@ def do_deploy(arch):
             return False
         put(arch, "/tmp/")
         sudo("mkdir -p {}{}/ ;".format(dest, ArName))
-        sudo("chown -R ubuntu:ubuntu /data/web_static")
+        sudo("chown -R $(id -un):$(id -gn) /data/web_static")
         run("tar -xzf /tmp/{}.tgz -C {}{}/".format(ArName, dest, ArName))
-        run("mv -f {}{}/web_static/* {}{}/".format(dest, ArName, dest, ArName))
+        run("rsync -a {}{}/web_static/* {}{}/".format(dest, ArName,
+            dest, ArName))
         run("rm -rf {}{}/web_static;".format(dest, ArName))
         run("rm -rf /data/web_static/current;")
         run("ln -s {}{}/ /data/web_static/current".format(dest, ArName))
