@@ -19,7 +19,7 @@ def do_deploy(archive_path):
             return False
         put(archive_path, "/tmp/")
         sudo("mkdir -p {}{}/".format(dest, ArName))
-        sudo("chown -R $(id -un):$(id -gn) /data/")
+        sudo("chown -R ubuntu:ubuntu /data/")
         run("tar -xzf /tmp/{}.tgz -C {}{}/".format(ArName, dest, ArName))
         run("rsync -a {}{}/web_static/* {}{}".format(dest, ArName,
             dest, ArName))
